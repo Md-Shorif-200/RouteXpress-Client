@@ -7,6 +7,7 @@ import ErrorPage from "../Components/ErrorPage";
 import Home from "../Pages/HomePage/Home";
 import SignUp from "../UserAuth/SignUp";
 import LogIn from "../UserAuth/LogIn";
+import BookPercelForm from "../Pages/Book_Percel/BookPercelForm";
 
 
 
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
          {
           path : 'log-in',
           element : <LogIn></LogIn>
+         },
+         {
+          path : 'book-percel',
+          element : <BookPercelForm></BookPercelForm>
          }
     ]
   },

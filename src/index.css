@@ -60,12 +60,12 @@ Text: #064E3B (Dark Green) */
 /*  */
 
 .form_error {
-    @apply text-base lowercase mb-2 text-red-700
+    @apply text-base capitalize mb-2 text-red-700 
 }
 
 
 .form_section input {
-    @apply border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10B981] mb-4 mt-2
+    @apply border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10B981] mb-4 mt-2 
 }
 
 
@@ -95,7 +95,7 @@ Text: #064E3B (Dark Green) */
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: #2563eb;
+  background-color: #10B981;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s ease-in-out;
@@ -106,7 +106,7 @@ Text: #064E3B (Dark Green) */
 }
 
  .nav_link a.active {
-  color: #2563eb;
+  color: #10B981;
 }
 
  .nav_link a.active::after {
@@ -135,7 +135,7 @@ body {
   height: 100%;
 }
 
-body {
+/* body {
   background: #000;
   font-family:
     Helvetica Neue,
@@ -146,7 +146,7 @@ body {
   color: #fff;
   margin: 0;
   padding: 0;
-}
+} */
 
 .swiper {
   width: 100%;
