@@ -51,8 +51,7 @@ const SignUp = () => {
     try {
       const result = await creatUser(data.email, data.password);
             await updateUserProfile(data.name,photoURL)
-      toast
-      ("Succssfully Created Account");
+      toast.success("Succssfully Created Account");
       navigate('/')
     } catch (error) {
       toast.error(error.message);

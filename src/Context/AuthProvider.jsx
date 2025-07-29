@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -9,48 +9,57 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import app from '../../firebase.init';
-import useAxiosSecure from '../Custom-Hooks/Api/useAxiosSecure';
+import app from "../../firebase.init";
+import useAxiosSecure from "../Custom-Hooks/Api/useAxiosSecure";
 
-export const authContext = createContext() // creat context api
+export const authContext = createContext(); // creat context api
 const auth = getAuth(app); // firebase auth
 
-const AuthProvider = ({children}) => {
+const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null); // user state
+  const [loading, setLoading] = useState(false); // loading state
+  const googleProvider = new GoogleAuthProvider();
+  const axiosSecure = useAxiosSecure(); // private api
 
-    const [user,setUser] = useState(null) // user state
-    const [loading,setLoading] = useState(false) // loading state
-      const googleProvider = new GoogleAuthProvider(); 
-      const axiosSecure = useAxiosSecure(); // private api
+  // console.log(user);
 
-    console.log(user);
-    
-
-
-// Firebase observer
+  // Firebase observer
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async(currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       setLoading(false);
+       console.log(currentUser);
+       
 
-      if(currentUser){
+      if (currentUser) {
+        const userInfo = {
+          userName: currentUser.displayName,
+          email: currentUser.email,
+          image: currentUser.photoURL,
+          role: "customer",
+          joiningDate: new Date(),
+        };
 
-         const  userInfo = {
-            userName : currentUser.displayName,
-            email : currentUser.email,
-            image : currentUser.photoURL,
-            role : "customer",
-            joiningDate : new Date()
-
-          }
-
-
+        try {
+          // send user informaton  to database
+          const result = await axiosSecure.post("/api/users", userInfo);
+          // console.log(result);
+          
+        } catch (error) {
+          toast.error(error.message);
+          console.log(error);
+          
+        }
       }
 
-      return () => {
+     
+    });
+
+     return () => {
         return unsubscribe();
       };
-    });
-  },[]);
+      
+  }, []);
 
   // firebase sign up
   const creatUser = (email, password) => {
@@ -79,36 +88,30 @@ const AuthProvider = ({children}) => {
     return signOut(auth);
   };
 
+  // update profile
+  const updateUserProfile = (name, image) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: image,
+    });
+  };
 
-  // update profile 
-    const updateUserProfile = (name,image) => {
-return updateProfile(auth.currentUser , {
-    displayName : name,
-    photoURL : image
-})
-    }
+  // authContext Info
+  const authContextInfo = {
+    user,
+    loading,
+    creatUser,
+    logIn,
+    googleLogIn,
+    logOut,
+    updateUserProfile,
+  };
 
-
-
-
-
-
-    // authContext Info
-    const authContextInfo = {
-         user,
-         loading,
-         creatUser,
-         logIn,
-         googleLogIn,
-         logOut,
-         updateUserProfile
-    }
-
-    return (
-        <authContext.Provider value={authContextInfo}>
-             {children}
-        </authContext.Provider>
-    );
+  return (
+    <authContext.Provider value={authContextInfo}>
+      {children}
+    </authContext.Provider>
+  );
 };
 
 export default AuthProvider;

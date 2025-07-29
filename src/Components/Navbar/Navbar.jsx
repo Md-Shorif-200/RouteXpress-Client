@@ -23,12 +23,12 @@ const Navbar = () => {
 
   return (
     <div className="bg-base-100 shadow-sm sticky top-0 z-50">
-      <div className="flex items-center justify-between px-4 sm:px-6 md:px-16 2xl:px-22 py-3 relative">
+      <div className="flex items-center justify-between common_padding relative">
         <div className="flex gap-x-32">
           {/*------ Logo */}
           <div className="flex items-center gap-x-2">
             {/* <img src={nav__logo} alt="Logo" className="w-[60px] h-[60px]" /> */}
-            <h2 className="text-xl font-semibold">EduSpark</h2>
+            <h2 className="text-xl font-semibold text-black">RouteXpress</h2>
           </div>
 
                        {/* ---- lg device nav-links */}
