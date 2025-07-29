@@ -4,9 +4,10 @@ import { FaSignOutAlt, FaUser } from "react-icons/fa";
 import { MdClose, MdDashboard } from "react-icons/md";
 import { IoMenu } from "react-icons/io5";
 import { Link } from 'react-router-dom';
+import useAuth from '../../Custom-Hooks/useAuth';
 
 const UserAvater = () => {
-    // const {user,logOut} = useAuth();
+    const {user,logOut} = useAuth();
 
       const avaterLinks = (
         <>
@@ -23,7 +24,7 @@ const UserAvater = () => {
             <MdDashboard /> Dashboard
           </Link>
           <Link
-            // onClick={logOut}
+            onClick={logOut}
             className="text-base font-semibold capitalize flex items-center gap-x-3 px-2 pb-6 pt-2 hover:bg-gray-100"
           >
             <FaSignOutAlt /> Logout

@@ -4,12 +4,16 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import img_1 from "../assets/lotte-react/Courier.json";
 import Lottie from "lottie-react";
+import useAuth from "../Custom-Hooks/useAuth";
+import Social_LogIn from "./Social_LogIn";
+import useAxiosPublic from "../Custom-Hooks/Api/useAxiosPublic";
+import toast from "react-hot-toast";
 
 
 
-// image hosting 
-// const imgHosting_key = import.meta.env.VITE_IMG_HOSTING_KEY;
-// const imgHosting_api = `https://api.imgbb.com/1/upload?key=${imgHosting_key}`
+// image hosting to imgbb
+const imgHosting_key = import.meta.env.VITE_IMG_HOSTING_KEY;
+const imgHosting_api = `https://api.imgbb.com/1/upload?key=${imgHosting_key}`
 
 
 const SignUp = () => {
@@ -21,18 +25,48 @@ const SignUp = () => {
   } = useForm();
     const [showPassword, setshowPassword] = useState(false);
 
-  
+  const {creatUser,updateUserProfile} = useAuth() // get data to context api
+  const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic() // public api
+
 
   //   form submit function
 
   const onsubmit = async (data) => {
 
+
+       // send img to imgbb and get url
+    const imageFile = {image : data.image[0] };
+
+    const result = await axiosPublic.post(imgHosting_api,imageFile,{
+            headers : {
+                'content-type' : 'multipart/form-data'
+              }
+    })
+
+    
+           if(result.data.success){
+
+            const  photoURL = result.data.data.display_url;
+    try {
+      const result = await creatUser(data.email, data.password);
+            await updateUserProfile(data.name,photoURL)
+      toast
+      ("Succssfully Created Account");
+      navigate('/')
+    } catch (error) {
+      toast.error(error.message);
+    }finally{
+          reset();
+    }
+      
+
+           }
+
+
+
+
         
-
-
-
-
-
   
   };
 
@@ -155,7 +189,7 @@ const SignUp = () => {
           </p>
 
           <div>
-            {/* <SocailLogIn></SocailLogIn> */}
+            <Social_LogIn></Social_LogIn>
           </div>
         </div>
 

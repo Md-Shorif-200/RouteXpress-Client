@@ -1,10 +1,113 @@
-import React from 'react';
+import React, { createContext, useEffect, useState } from 'react';
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
+import app from '../../firebase.init';
+import useAxiosSecure from '../Custom-Hooks/Api/useAxiosSecure';
 
-const AuthProvider = () => {
+export const authContext = createContext() // creat context api
+const auth = getAuth(app); // firebase auth
+
+const AuthProvider = ({children}) => {
+
+    const [user,setUser] = useState(null) // user state
+    const [loading,setLoading] = useState(false) // loading state
+      const googleProvider = new GoogleAuthProvider(); 
+      const axiosSecure = useAxiosSecure(); // private api
+
+    console.log(user);
+    
+
+
+// Firebase observer
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async(currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+
+      if(currentUser){
+
+         const  userInfo = {
+            userName : currentUser.displayName,
+            email : currentUser.email,
+            image : currentUser.photoURL,
+            role : "customer",
+            joiningDate : new Date()
+
+          }
+
+
+      }
+
+      return () => {
+        return unsubscribe();
+      };
+    });
+  },[]);
+
+  // firebase sign up
+  const creatUser = (email, password) => {
+    setLoading(true);
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
+
+  //  firebase log in
+
+  const logIn = (email, password) => {
+    setLoading(true);
+    return signInWithEmailAndPassword(auth, email, password);
+  };
+
+  // google logIn system
+
+  const googleLogIn = () => {
+    setLoading(true);
+    return signInWithPopup(auth, googleProvider);
+  };
+
+  // firebase  log out
+
+  const logOut = () => {
+    setLoading(true);
+    return signOut(auth);
+  };
+
+
+  // update profile 
+    const updateUserProfile = (name,image) => {
+return updateProfile(auth.currentUser , {
+    displayName : name,
+    photoURL : image
+})
+    }
+
+
+
+
+
+
+    // authContext Info
+    const authContextInfo = {
+         user,
+         loading,
+         creatUser,
+         logIn,
+         googleLogIn,
+         logOut,
+         updateUserProfile
+    }
+
     return (
-        <div>
-            
-        </div>
+        <authContext.Provider value={authContextInfo}>
+             {children}
+        </authContext.Provider>
     );
 };
 

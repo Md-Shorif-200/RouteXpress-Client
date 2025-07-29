@@ -7,6 +7,9 @@ import img_1 from '../assets/lotte-react/courier-2.json'
 import img_2 from '../assets/lotte-react/courier-3.json'
 import img_3 from '../assets/lotte-react/document checking loader.json'
 import Lottie from "lottie-react";
+import useAuth from "../Custom-Hooks/useAuth";
+import toast from "react-hot-toast";
+import Social_LogIn from "./Social_LogIn";
 
 
 
@@ -21,16 +24,29 @@ const LogIn = () => {
   } = useForm();
 
  
-
-  const [showPassword, setshowPassword] = useState(false);
+  const {logIn} = useAuth()
+  const [showPassword, setshowPassword] = useState(false); 
+  const loacation = useLocation();
+  const navigate = useNavigate();
   
 
-//   const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || "/";
 
-  //   form submit function
 
   const onsubmit = async (data) => {
   
+
+    try {
+      const result = await logIn(data.email, data.password);
+
+      navigate(from, { replace: true });
+      toast("log In Succssfully");
+    } catch (error) {
+      toast.error(error.message);
+    }finally{
+          reset();
+    }
+
   
 
 
@@ -130,7 +146,7 @@ const LogIn = () => {
         </p>
 
         <div>
-          {/* <SocailLogIn></SocailLogIn> */}
+          <Social_LogIn></Social_LogIn>
         </div>
       </div>
         </div>

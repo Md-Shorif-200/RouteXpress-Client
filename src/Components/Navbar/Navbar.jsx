@@ -8,13 +8,15 @@ import { FaSearch, FaSearchDollar } from "react-icons/fa";
 // import nav__logo from "../../assets/navLogo/Nav_logo.png";
 import Navlinks from "./Navlinks";
 import UserAvater from "./UserAvater";
+import useAuth from "../../Custom-Hooks/useAuth";
 // import useClass from "../../Hooks/useClass";
 
 
 const Navbar = () => {
-    const [isActive, setIsActive] = useState(false);
+          const {user} = useAuth() // get user data to context api
 
-let user = false;
+
+    const [isActive, setIsActive] = useState(false); // responsive menu icon state
 
 
   const handleMenuIcon = () => setIsActive(true);
@@ -62,7 +64,7 @@ let user = false;
                 </div>
               </div>
             ) : (
-              <Link to="signIn">
+              <Link to="log-in">
                 <button className="secondary_btn uppercase">
                   <span>Log In</span>
                 </button>
@@ -116,7 +118,7 @@ let user = false;
               </div>
             ) : (
               <div className="text-center">
-                <Link to="signIn">
+                <Link to="log-in">
                   <button className="secondary_btn uppercase">
                     <span>Log In / Sign Up</span>
                   </button>
