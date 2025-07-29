@@ -1,29 +1,36 @@
 import React from 'react';
-import useAllusers from '../Custom-Hooks/useAllusers';
-import useRole from '../Custom-Hooks/Api/useRole';
+
+
+import { Outlet } from 'react-router-dom';
+import { FiMenu } from 'react-icons/fi'; // More modern and clean icon
+import DashboardSidebar from '../Dashboard_Pages/DashboardSidebar';
+
 
 const DashboardLayout = () => {
-   const [role,isLoading,refetch] = useRole();
-   console.log(role);
-   
     
+
+
     return (
-    <div className="drawer lg:drawer-open">
+      <div className="drawer md:drawer-open">
   <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-  <div className="drawer-content flex flex-col items-center justify-center">
-    {/* Page content here */}
-    <label htmlFor="my-drawer-2" className="btn btn-primary drawer-button lg:hidden">
-      Open drawer
-    </label>
+  <div className="drawer-content">
+           
+  <div className="flex justify-between items-center px-10 py-6 md:hidden">
+                <div className="logo">
+                      <h1> RouteXpress </h1>
+                </div>
+  <label htmlFor="my-drawer-2" className="drawer-button text-2xl text-gray-700 hover:text-primary transition-all duration-200 cursor-pointer" >
+    <FiMenu />
+  </label>
+</div>
+               
+
+                 <Outlet></Outlet>
   </div>
-  <div className="drawer-side">
-    <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
-    <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-      {/* Sidebar content here */}
-      <li><a>Sidebar Item 1</a></li>
-      <li><a>Sidebar Item 2</a></li>
-    </ul>
-  </div>
+         
+
+
+          <DashboardSidebar></DashboardSidebar>
 </div>
     );
 };
