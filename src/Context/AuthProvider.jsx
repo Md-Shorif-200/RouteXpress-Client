@@ -11,6 +11,7 @@ import {
 } from "firebase/auth";
 import app from "../../firebase.init";
 import useAxiosSecure from "../Custom-Hooks/Api/useAxiosSecure";
+// import toast from "react-hot-toast";
 
 export const authContext = createContext(); // creat context api
 const auth = getAuth(app); // firebase auth
@@ -46,7 +47,7 @@ const AuthProvider = ({ children }) => {
           // console.log(result);
           
         } catch (error) {
-          toast.error(error.message);
+          // toast.error(error.message);
           console.log(error);
           
         }

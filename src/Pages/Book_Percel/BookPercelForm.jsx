@@ -1,18 +1,50 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import img_1 from '../../assets/Book-Percel/img-1.jpg';
+import useAxiosSecure from '../../Custom-Hooks/Api/useAxiosSecure';
+import useAuth from '../../Custom-Hooks/useAuth';
+import toast from 'react-hot-toast';
 
 const BookPercelForm = () => {
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors,isSubmitting }
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log('Form Data:', data);
-    reset();
+  const {user} = useAuth();
+  const axiosSecure = useAxiosSecure();
+
+
+  const onSubmit = async(data) => {
+                const book_percel_info = {
+                     customerName : user.displayName,
+                     customerEmail : user.email,
+                     photo : user.photoURL,
+                     picupAddress : data.pickup,
+                     deliveryAddress :data.delivery,
+                     percelSize : data.parcelSize,
+                     payment : data.payment,
+                     bookedDate : new Date().toLocaleString()
+
+                }
+
+            //   send percel-data to database
+              try {
+                const response = await axiosSecure.post('/api/book-percel', book_percel_info);
+                const result = response.data;
+                            if(result.acknowledged && result.insertedId){
+                                  toast.success('Percel Booked Succesfully')
+                            }
+                
+              } catch (error) {
+                 console.log(error);
+                 
+              }finally{
+                            reset()
+              }
+                
   };
 
   return (
@@ -101,7 +133,9 @@ const BookPercelForm = () => {
             type="submit"
             className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 rounded-md transition duration-300"
           >
-            Submit
+            {
+                 isSubmitting ?  'Submitting....' : 'Submit'
+            }
           </button>
         </div>
       </form>
