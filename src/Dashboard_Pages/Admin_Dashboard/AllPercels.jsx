@@ -22,15 +22,22 @@ const AllPercels = () => {
       return;
     }
 
-    const data = {
+    const percelData = {
       percelId: percel._id,
-      agentEmail: agentEmail,
+      deliveryAgentEmail: agentEmail,
+      customerName : percel.customerName, 
+      customerEmail : percel.customerEmail, 
+      picupAddress : percel.picupAddress, 
+      deliveryAddress : percel.deliveryAddress, 
+      percelSize : percel.percelSize, 
+      paymentType : percel.payment, 
+      status : percel.status
     };
 
     try {
-      const response = await axiosSecure.post('/api/select-deliveryAgent', data);
+      const response = await axiosSecure.post('/api/select-deliveryAgent', percelData);
       console.log(response.data);
-      toast.success('Agent assigned and email sent!');
+      toast.success('send percel data to delivery agent');
     } catch (error) {
       console.error(error);
       toast.error('Failed to assign agent');

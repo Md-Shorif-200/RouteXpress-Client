@@ -46,8 +46,8 @@ const BookingHIstory = () => {
   <span
     className={`px-3 py-1 rounded-full text-sm font-semibold
       ${myPercel.status === 'pending' && 'bg-gray-200 text-gray-800'}
-      ${myPercel.status === 'Picked Up' && 'bg-blue-200 text-blue-800'}
-      ${myPercel.status === 'In Transit' && 'bg-yellow-200 text-yellow-800'}
+      ${myPercel.status === 'Picked_Up' && 'bg-blue-200 text-blue-800'}
+      ${myPercel.status === 'In_Transit' && 'bg-yellow-200 text-yellow-800'}
       ${myPercel.status === 'Delivered' && 'bg-green-200 text-green-800'}
       ${myPercel.status === 'Failed' && 'bg-red-200 text-red-800'}
     `}

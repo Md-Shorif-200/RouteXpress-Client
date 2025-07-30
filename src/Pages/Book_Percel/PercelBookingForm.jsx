@@ -6,7 +6,7 @@ import useAuth from '../../Custom-Hooks/useAuth';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
-const BookPercelForm = () => {
+const PercelBookingForm = () => {
   const {
     register,
     handleSubmit,
@@ -117,7 +117,7 @@ const BookPercelForm = () => {
             <label className="flex items-center gap-2">
               <input
                 type="radio"
-                value="cod"
+                value="cash_On_Delivery"
                 {...register('payment', { required: 'Select a payment option' })}
               />
               <span>Cash on Delivery (COD)</span>
@@ -150,4 +150,4 @@ const BookPercelForm = () => {
   );
 };
 
-export default BookPercelForm;
+export default PercelBookingForm;

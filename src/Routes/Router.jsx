@@ -7,12 +7,13 @@ import ErrorPage from "../Components/ErrorPage";
 import Home from "../Pages/HomePage/Home";
 import SignUp from "../UserAuth/SignUp";
 import LogIn from "../UserAuth/LogIn";
-import BookPercelForm from "../Pages/Book_Percel/BookPercelForm";
 import DashboardLayout from "../Layout/DashboardLayout";
 import Dashboard_Redirect_Page from "../Dashboard_Pages/Dashboard_Redirect_Page";
 import BookingHIstory from "../Dashboard_Pages/Customer_Dashboard/BookingHIstory";
 import AllUsers from "../Dashboard_Pages/Admin_Dashboard/AllUsers";
 import AllPercels from "../Dashboard_Pages/Admin_Dashboard/AllPercels";
+import Assigned_Percel from "../Dashboard_Pages/DeliveryAgent_Dashboard/Assigned_Percel";
+import PercelBookingForm from "../Pages/Book_Percel/percelBookingForm";
 
 
 
@@ -38,7 +39,7 @@ export const router = createBrowserRouter([
          },
          {
           path : 'book-percel',
-          element : <BookPercelForm></BookPercelForm>
+          element : <PercelBookingForm></PercelBookingForm>
          }
     ]
   },
@@ -63,7 +64,12 @@ export const router = createBrowserRouter([
          {
           path : '/dashboard/all-percels',
           element : <AllPercels></AllPercels>
+         },
+         {
+          path : '/dashboard/delivery-agent',
+          element : <Assigned_Percel></Assigned_Percel>
          }
+         
       ]
 
   }

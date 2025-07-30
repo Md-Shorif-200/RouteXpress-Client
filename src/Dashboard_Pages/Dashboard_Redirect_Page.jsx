@@ -23,7 +23,7 @@ const Dashboard_Redirect_Page = () => {
                     }else if(role === 'admin'){
                         return <Navigate to='/dashboard/admin'></Navigate>
                     }else{
-                          return <Navigate to='/dashboard/teacher'></Navigate>
+                          return <Navigate to='/dashboard/delivery-agent'></Navigate>
                     }
 
 
