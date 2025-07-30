@@ -26,7 +26,7 @@ const handleAssignRole = async (user,newRole) => {
         
           if(response.data.acknowledged &&  response.data.modifiedCount > 0){
                     refetch()
-              toast.success(`${user.userName} is now a ${user.role}`)
+              toast.success(`successfully updated  ${user.userName} role`)
           }
         
     } catch (error) {
@@ -85,7 +85,7 @@ const handleAssignRole = async (user,newRole) => {
    {user?.role}
   </span>
 </td>
-
+                {/* ------------- change user role  */}
 <td>
   <select
     className="select select-sm select-bordered w-44"

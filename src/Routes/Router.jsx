@@ -12,6 +12,7 @@ import DashboardLayout from "../Layout/DashboardLayout";
 import Dashboard_Redirect_Page from "../Dashboard_Pages/Dashboard_Redirect_Page";
 import BookingHIstory from "../Dashboard_Pages/Customer_Dashboard/BookingHIstory";
 import AllUsers from "../Dashboard_Pages/Admin_Dashboard/AllUsers";
+import AllPercels from "../Dashboard_Pages/Admin_Dashboard/AllPercels";
 
 
 
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
          {
           path : '/dashboard/admin',
           element : <AllUsers></AllUsers>
+         },
+         {
+          path : '/dashboard/all-percels',
+          element : <AllPercels></AllPercels>
          }
       ]
 

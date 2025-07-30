@@ -10,7 +10,7 @@ const Admin_Menu = () => {
       <li className="text-xl text-center font-bold primary_text_color mb-6">Admin Panel</li>
   
 
-        {/* Booking History */}
+        {/*------------------ All Users */}
         <li>
           <NavLink
             to="/dashboard/admin"
@@ -22,6 +22,23 @@ const Admin_Menu = () => {
           >
             <FaUsers className="text-lg" />
              All Users
+          </NavLink>
+        </li>
+
+
+        
+        {/*  ------------------- all percels*/}
+        <li>
+          <NavLink
+            to="/dashboard/all-percels"
+            className={({ isActive }) =>
+              `flex items-center gap-3 p-2 rounded-md transition ${
+                isActive ? 'primary_bg_color text-white' : 'text-gray-700 hover:bg-blue-100'
+              }`
+            }
+          >
+            <FaUsers className="text-lg" />
+             All Percels
           </NavLink>
         </li>
 
