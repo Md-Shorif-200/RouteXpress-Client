@@ -20,8 +20,8 @@ const Dashboard_Redirect_Page = () => {
 
                     if(role == 'customer'){
                            return <Navigate to='/dashboard/booking-history'></Navigate>
-                    }else if(role === 'student'){
-                        return <Navigate to='/dashboard/student'></Navigate>
+                    }else if(role === 'admin'){
+                        return <Navigate to='/dashboard/admin'></Navigate>
                     }else{
                           return <Navigate to='/dashboard/teacher'></Navigate>
                     }

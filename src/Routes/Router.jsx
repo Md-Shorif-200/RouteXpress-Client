@@ -11,6 +11,8 @@ import BookPercelForm from "../Pages/Book_Percel/BookPercelForm";
 import DashboardLayout from "../Layout/DashboardLayout";
 import Dashboard_Redirect_Page from "../Dashboard_Pages/Dashboard_Redirect_Page";
 import BookingHIstory from "../Dashboard_Pages/Customer_Dashboard/BookingHIstory";
+import AllUsers from "../Dashboard_Pages/Admin_Dashboard/AllUsers";
+
 
 
 
@@ -52,6 +54,10 @@ export const router = createBrowserRouter([
          {
           path : '/dashboard/booking-history',
           element : <BookingHIstory></BookingHIstory>
+         },
+         {
+          path : '/dashboard/admin',
+          element : <AllUsers></AllUsers>
          }
       ]
 

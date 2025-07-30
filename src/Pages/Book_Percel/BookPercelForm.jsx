@@ -4,6 +4,7 @@ import img_1 from '../../assets/Book-Percel/img-1.jpg';
 import useAxiosSecure from '../../Custom-Hooks/Api/useAxiosSecure';
 import useAuth from '../../Custom-Hooks/useAuth';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const BookPercelForm = () => {
   const {
@@ -15,6 +16,7 @@ const BookPercelForm = () => {
 
   const {user} = useAuth();
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate()
 
 
   const onSubmit = async(data) => {
@@ -26,6 +28,7 @@ const BookPercelForm = () => {
                      deliveryAddress :data.delivery,
                      percelSize : data.parcelSize,
                      payment : data.payment,
+                     status : 'pending',
                      bookedDate : new Date().toLocaleString()
 
                 }
@@ -35,7 +38,11 @@ const BookPercelForm = () => {
                 const response = await axiosSecure.post('/api/book-percel', book_percel_info);
                 const result = response.data;
                             if(result.acknowledged && result.insertedId){
-                                  toast.success('Percel Booked Succesfully')
+                                  toast.success('Percel Booked Succesfully');
+                                  
+                                      setTimeout(() => {
+                                        navigate('/dashboard/booking-history')
+                                      }, 300);
                             }
                 
               } catch (error) {
