@@ -1,9 +1,42 @@
 import React, { useState } from "react";
 import useAllusers from "../../Custom-Hooks/useAllusers";
+import useAxiosSecure from "../../Custom-Hooks/Api/useAxiosSecure";
+import useAuth from "../../Custom-Hooks/useAuth";
+import toast from "react-hot-toast";
 
 const AllUsers = () => {
   const [users, isLoading, refetch] = useAllusers();
-  const [assignRole,setAssignRole] = useState('')
+  const axiosSecure = useAxiosSecure() ;
+//   const {user} = useAuth();
+//   const [assignRole,setAssignRole] = useState('')
+//   console.log(assignRole);
+
+
+//   assign role function
+const handleAssignRole = async (user,newRole) => {
+     console.log(user,newRole);
+     
+    const updatedRole = {
+        role : newRole,
+    }
+
+
+    try {
+        const response = await axiosSecure.patch(`/api/users/update-role/${user.email}`, updatedRole);
+        
+          if(response.data.acknowledged &&  response.data.modifiedCount > 0){
+                    refetch()
+              toast.success(`${user.userName} is now a ${user.role}`)
+          }
+        
+    } catch (error) {
+            console.log(error);
+            toast.error(error.message)
+               
+    }
+        
+}
+  
 
   return (
     <div className="p-4">
@@ -56,11 +89,12 @@ const AllUsers = () => {
 <td>
   <select
     className="select select-sm select-bordered w-44"
-    onChange={(e) => setAssignRole(e.target.value)}
+    onChange={(e) => handleAssignRole(user, e.target.value)}
   >
     <option disabled>Assign Role</option>
     <option value="admin">Make Admin</option>
     <option value="deliveryAgent">Make Delivery Agent</option>
+    <option value="customer">Customer</option>
 
   </select>
 </td>
