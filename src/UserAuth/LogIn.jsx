@@ -40,7 +40,7 @@ const LogIn = () => {
       const result = await logIn(data.email, data.password);
 
       navigate(from, { replace: true });
-      toast("log In Succssfully");
+      toast.success("log In Succssfully");
     } catch (error) {
       toast.error(error.message);
     }finally{

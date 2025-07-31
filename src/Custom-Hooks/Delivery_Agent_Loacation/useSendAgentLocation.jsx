@@ -23,7 +23,11 @@ const useSendAgentLocation = (myPercelData,status) => {
             longitude : lng,
             deliveryStatus : updatedStatus
           }
-          axiosSecure.patch('/api/update-deliveryAgent-location',data)
+         const response =  axiosSecure.patch('/api/update-deliveryAgent-location',data);
+         const result = response.data;
+         console.log(result);
+         
+         
     };
 
     const watchId = navigator.geolocation.watchPosition(

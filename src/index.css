@@ -38,6 +38,10 @@ Text: #064E3B (Dark Green) */
     @apply bg-[#10B981] text-white font-semibold px-5 py-1.5 capitalize text-base rounded-md  cursor-pointer
 }
 
+.disabled_button{
+  @apply  btn font-semibold px-5 py-1.5 capitalize text-base rounded-md  cursor-pointer
+}
+
 
 
 .secondary_btn{
