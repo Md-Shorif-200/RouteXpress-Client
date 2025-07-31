@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import GoogleLocation from './GoogleLocation';
+import { IoMdCloseCircle } from "react-icons/io";
+
 
 const PercelLocationModal = ({setModalOpen,myPercelData}) => {
     console.log(myPercelData);
@@ -6,21 +9,33 @@ const PercelLocationModal = ({setModalOpen,myPercelData}) => {
 
 
   const { percelSize, picupAddress, deliveryAddress, status, agentName } = myPercelData || {};
+          const [showGoogleMap,setShowGoogleMap] = useState(false) // google map state
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-[500px] relative">
+    <div className="fixed inset-0  flex items-center justify-center bg-black/60 z-20">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-[600px] relative">
         {/* Close Button */}
         <button
           onClick={() => setModalOpen(false)}
-          className="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-5xl font-medium"
+          className=" absolute -top-4 -right-4   hover:text-red-500 text-4xl font-medium z-30"
         >
-          &times;
+          <IoMdCloseCircle></IoMdCloseCircle>
         </button>
 
-       {/* Title */}
+                {
+                    showGoogleMap ? 
+                    
+                    <>
+                   {/* show google map */}
+                        <GoogleLocation myPercelData={myPercelData}></GoogleLocation>
+                    </> : 
+                    
+                    <>
+                    {/* modal data */}
+
+                          {/* Title */}
 <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-  📦 Percel Location Info
+  Percel Location Info
 </h2>
 
 {/* Percel Details in Card Style */}
@@ -66,11 +81,14 @@ const PercelLocationModal = ({setModalOpen,myPercelData}) => {
         <div className="mt-6 text-center">
           <button
             className="primary_btn"
-            onClick={() => alert("Google Map link will be opened here.")}
+            onClick={() => setShowGoogleMap(true)}
           >
             View on Google Map
           </button>
         </div>
+                    
+                    </>
+                }
       </div>
     </div>
   );
