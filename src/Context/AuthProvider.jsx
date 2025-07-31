@@ -17,12 +17,12 @@ export const authContext = createContext(); // creat context api
 const auth = getAuth(app); // firebase auth
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // user state
+  const [user, setUser] = useState(''); // user state
   const [loading, setLoading] = useState(false); // loading state
   const googleProvider = new GoogleAuthProvider();
   const axiosSecure = useAxiosSecure(); // private api
 
-  // console.log(user);
+  console.log(user);
 
   // Firebase observer
   useEffect(() => {
@@ -40,6 +40,9 @@ const AuthProvider = ({ children }) => {
           role: "customer",
           joiningDate: new Date(),
         };
+
+        console.log(userInfo);
+        
 
         try {
           // send user informaton  to database

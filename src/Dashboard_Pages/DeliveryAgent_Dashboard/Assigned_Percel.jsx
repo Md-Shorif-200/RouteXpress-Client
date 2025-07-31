@@ -1,62 +1,78 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useAxiosSecure from "../../Custom-Hooks/Api/useAxiosSecure";
 import useAuth from "../../Custom-Hooks/useAuth";
 import Loading from "../../Components/Loading";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import useAssingedPercel from "../../Custom-Hooks/useAssingedPercel";
+import useSendAgentLocation from "../../Custom-Hooks/Delivery_Agent_Loacation/useSendAgentLocation";
 
 const Assigned_Percel = () => {
   const [assignedPercels, isLoading, refetch] = useAssingedPercel();
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const [selectValues, setSelectValues] = useState({}); // Store select field values
+  const [myPercelData,setMyPercelData] = useState({})
+  console.log(selectValues);
+  
 
-  // get my Percels
+  //-------- send percel id to useSendCustom hook
+           useSendAgentLocation(myPercelData,selectValues)
+
+
+
+  // Filter assigned percel for current user
   const myAssignedPercels = assignedPercels?.filter(
     (percel) => percel?.deliveryAgentEmail === user?.email
   );
-  console.log(myAssignedPercels);
 
-  // change percel status function
+  
+           
+
+  // Handle status change function
   const handlePercelStatus = async (myPercel, updatedStatus) => {
-    console.log(myPercel, updatedStatus);
     const statusData = {
       delivery_Agent_collection_id: myPercel._id,
       percelId: myPercel.percelId,
       status: updatedStatus,
     };
-
-    // Status-wise title message
+            // set swal title conditionaly 
     let titleMessage = "Percel status updated";
 
-    if (updatedStatus === "Picked_Up") {
-      titleMessage = "Percel has been picked up";
-    } else if (updatedStatus === "In_Transit") {
-      titleMessage = "Percel is now in transit";
-    } else if (updatedStatus === "Delivered") {
-      titleMessage = "Percel has been delivered";
-    } else if (updatedStatus === "Failed") {
-      titleMessage = "Percel delivery failed";
-    }
+    if (updatedStatus === "Picked_Up") titleMessage = "Percel has been picked up";
+    else if (updatedStatus === "In_Transit") titleMessage = "Percel is now in transit";
+    else if (updatedStatus === "Delivered") titleMessage = "Percel has been delivered";
+    else if (updatedStatus === "Failed") titleMessage = "Percel delivery failed";
 
     try {
-      const response = await axiosSecure.patch(
-        "/api/change-percel-status",
-        statusData
-      );
+      const response = await axiosSecure.patch("/api/change-percel-status", statusData);
       const result = response.data;
+
       if (
         result.bookedPercel.acknowledged &&
         result.bookedPercel.modifiedCount > 0 &&
         result.deliveryAgent.modifiedCount > 0
       ) {
-        Swal.fire({
-          title: titleMessage,
-          icon: "success",
-          draggable: true,
-        });
+        Swal.fire({ title: titleMessage, icon: "success", draggable: true });
 
-        refetch() // refetch all data 
+        // refetch data
+        refetch();
+
+           
+        //               // Reset select field to default empty
+        // setSelectValues((prev) => ({
+        //   ...prev,
+        //   [myPercel._id]: "",
+        // }));
+
+      // store percel id 
+
+   if (updatedStatus) {
+  setMyPercelData(myPercel); 
+}
+            
+
+        
       }
     } catch (error) {
       console.log(error);
@@ -64,73 +80,79 @@ const Assigned_Percel = () => {
     }
   };
 
-  if (isLoading) {
-    return <Loading></Loading>;
-  }
+  if (isLoading) return <Loading />;
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-semibold mb-4 ">
-        Total Assigned Percels : {myAssignedPercels?.length}{" "}
+      <h1 className="text-2xl font-semibold mb-4">
+        Total Assigned Percels : {myAssignedPercels?.length}
       </h1>
+
       <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
         <table className="table">
-          {/* head */}
           <thead>
             <tr>
               <th>#</th>
               <th>Customer Email</th>
               <th>Percel Size</th>
-              <th>Picup Address</th>
-              <th>Delevery Address</th>
+              <th>Pickup Address</th>
+              <th>Delivery Address</th>
               <th>Payment Type</th>
-              <th> Status</th>
+              <th>Status</th>
               <th>Change Status</th>
             </tr>
           </thead>
+
           <tbody>
-            {myAssignedPercels?.map((myPercel, index) => {
-              return (
-                <tr>
-                  <th>{index + 1} </th>
-                  <td> {myPercel.customerEmail} </td>
-                  <td> {myPercel.percelSize} </td>
-                  <td> {myPercel.picupAddress} </td>
-                  <td> {myPercel.deliveryAddress} </td>
-                  <td> {myPercel.paymentType} </td>
+            {myAssignedPercels?.map((myPercel, index) => (
+              <tr key={myPercel._id}>
+                <th>{index + 1}</th>
+                <td>{myPercel.customerEmail}</td>
+                <td>{myPercel.percelSize}</td>
+                <td>{myPercel.picupAddress}</td>
+                <td>{myPercel.deliveryAddress}</td>
+                <td>{myPercel.paymentType}</td>
 
-                  <td>
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-semibold
-      ${myPercel.status === "pending" && "bg-gray-200 text-gray-800"}
-      ${myPercel.status === "Picked_Up" && "bg-blue-200 text-blue-800"}
-      ${myPercel.status === "In_Transit" && "bg-yellow-200 text-yellow-800"}
-      ${myPercel.status === "Delivered" && "bg-green-200 text-green-800"}
-      ${myPercel.status === "Failed" && "bg-red-200 text-red-800"}
-    `}
-                    >
-                      {myPercel.status}
-                    </span>
-                  </td>
+                <td>
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-semibold
+                      ${myPercel.status === "pending" && "bg-gray-200 text-gray-800"}
+                      ${myPercel.status === "Picked_Up" && "bg-blue-200 text-blue-800"}
+                      ${myPercel.status === "In_Transit" && "bg-yellow-200 text-yellow-800"}
+                      ${myPercel.status === "Delivered" && "bg-green-200 text-green-800"}
+                      ${myPercel.status === "Failed" && "bg-red-200 text-red-800"}
+                    `}
+                  >
+                    {myPercel.status}
+                  </span>
+                </td>
 
-                  {/* ------------- change percel status  */}
-                  <td>
-                    <select
-                      className="select select-sm select-bordered w-44"
-                      onChange={(e) =>
-                        handlePercelStatus(myPercel, e.target.value)
-                      }
-                    >
-                      <option disabled>Select Delivery Status</option>
-                      <option value="Picked_Up">Picked Up</option>
-                      <option value="Delivered">Delivered</option>
-                      <option value="In_Transit">In Transit</option>
-                      <option value="Failed">Faild</option>
-                    </select>
-                  </td>
-                </tr>
-              );
-            })}
+                <td>
+                  <select
+                    className="select select-sm select-bordered w-44"
+                    value={selectValues[myPercel._id] || ""}
+                    onChange={(e) => {
+                      const selectedStatus = e.target.value;
+                        //  Update the selectValues state
+  setSelectValues((prev) => ({
+    ...prev,
+    [myPercel._id]: selectedStatus,
+  }));
+
+
+                      if (!selectedStatus) return;
+                      handlePercelStatus(myPercel, selectedStatus);
+                    }}
+                  >
+                    <option disabled value="">Select Delivery Status</option>
+                    <option value="Picked_Up">Picked Up</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="In_Transit">In Transit</option>
+                    <option value="Failed">Failed</option>
+                  </select>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

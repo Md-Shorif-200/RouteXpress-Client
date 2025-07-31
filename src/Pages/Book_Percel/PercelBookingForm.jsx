@@ -5,6 +5,7 @@ import useAxiosSecure from '../../Custom-Hooks/Api/useAxiosSecure';
 import useAuth from '../../Custom-Hooks/useAuth';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import useRole from '../../Custom-Hooks/Api/useRole';
 
 const PercelBookingForm = () => {
   const {
@@ -16,7 +17,8 @@ const PercelBookingForm = () => {
 
   const {user} = useAuth();
   const axiosSecure = useAxiosSecure();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [role] = useRole()
 
 
   const onSubmit = async(data) => {
@@ -40,9 +42,15 @@ const PercelBookingForm = () => {
                             if(result.acknowledged && result.insertedId){
                                   toast.success('Percel Booked Succesfully');
                                   
-                                      setTimeout(() => {
+                                       if(role == 'admin'){
+                                        setTimeout(() => {
+                                        navigate('/')
+                                      }, 300);
+                                       }else{
+                                          setTimeout(() => {
                                         navigate('/dashboard/booking-history')
                                       }, 300);
+                                       }
                             }
                 
               } catch (error) {

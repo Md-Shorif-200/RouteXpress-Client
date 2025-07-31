@@ -9,6 +9,7 @@ const AllPercels = () => {
   const [bookedPercels, isLoading, refetch] = useBookedPercel(); // get all parcels
   const [deliveryAgents] = useDeliveryAgents(); // get all delivery agents
   const axiosSecure = useAxiosSecure(); // private API
+  const [disableBtn,setDisableBtn] = useState({})
 
   // State to track selected agent for each parcel
   const [selectedAgents, setSelectedAgents] = useState({});
@@ -36,8 +37,16 @@ const AllPercels = () => {
 
     try {
       const response = await axiosSecure.post('/api/select-deliveryAgent', percelData);
-      console.log(response.data);
+
       toast.success('send percel data to delivery agent');
+      refetch() // refetch data
+
+          // set disable state to disable send button
+    
+      setDisableBtn((prev) => ({
+          ...prev,
+         [percel._id] : true
+      })); 
     } catch (error) {
       console.error(error);
       toast.error('Failed to assign agent');
@@ -118,12 +127,21 @@ const AllPercels = () => {
                 </td>
 
                 <td>
-                  <button
+                   {
+                    disableBtn[percel._id] ? 
+                     <>
+                        <button className='btn btn-sm' disabled> Send</button>
+                     </> : 
+                    
+                    <>
+                     <button
                     className="primary_btn"
                     onClick={() => handleSendEmail(percel)}
                   >
                     Send
                   </button>
+                    </>
+                   }
                 </td>
               </tr>
             ))}
